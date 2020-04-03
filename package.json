@@ -1,0 +1,24 @@
+{
+  "name": "nottdbot",
+  "version": "1.0.0",
+  "description": "not a td bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spiltbeans/NotTDBot.git"
+  },
+  "author": "Eyas Valdez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spiltbeans/NotTDBot/issues"
+  },
+  "homepage": "https://github.com/spiltbeans/NotTDBot#readme",
+  "dependencies": {
+    "discord.js": "^12.1.1",
+    "timer": "^1.0.1",
+    "timers.js": "^1.1.10"
+  }
+}
