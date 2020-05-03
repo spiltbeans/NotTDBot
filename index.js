@@ -62,6 +62,16 @@ bot.on('message', msg=>{
         let graceSecond = setTimeout(grace, (min*6) + five_seconds*2, msg, 4);
         let graceThird = setTimeout(grace, (min*6) + five_seconds*3, msg, 5);
 
+    }else if(msg.content === "!start {8}"){
+        //8 minute speech
+        msg.reply("Timer started!");
+        let openPOI = setTimeout(grace, min, msg, 0);
+        let closePOI = setTimeout(grace, min*7, msg, 1);
+        let closeSpeech = setTimeout(grace, min*8, msg, 2);
+        let graceFirst = setTimeout(grace, (min*8) + five_seconds, msg, 3);
+        let graceSecond = setTimeout(grace, (min*8) + five_seconds*2, msg, 4);
+        let graceThird = setTimeout(grace, (min*8) + five_seconds*3, msg, 5);
+
     }else if(msg.content === "!start {4}"){
         //4 minute speech
         msg.reply("Timer started! All protected time!");
@@ -71,7 +81,7 @@ bot.on('message', msg=>{
         let graceThird = setTimeout(grace, (min*4) + five_seconds*3, msg, 5);
 
     }else if(msg.content === "!help"){
-        msg.channel.send('Commands:\n - !help - provides commands\n - !start {LENGTH OF SPEECH} - gives time signal for speech, default is 7 minute time signals\n    options: 3, 4, 6, 7, 10\nIf you need any help add me: Spiltbeans#3644');
+        msg.channel.send('Commands:\n - !help - provides commands\n - !start {LENGTH OF SPEECH} - gives time signal for speech, default (!start) is 7 minute time signals\n    options: 3, 4, 6, 7, 8, 10\nIf you need any help add me: Spiltbeans#3644');
 
     }
 });
