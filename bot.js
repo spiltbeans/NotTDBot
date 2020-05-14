@@ -11,6 +11,7 @@ const timer = require('timers');
 const bot = new Discord.Client();
 // const secrets = require('./secure/secrets');
 
+// const token = secrets.token;    //api token
 const token = process.env.TOKEN;    //api token
 const prefix = '!';             //prefix for commands
 
@@ -24,12 +25,13 @@ const timer_help = ' - !start - Gives time signal for a 7 minute speech';
 const timer_help_2 = ' - !start {LENGTH OF SPEECH} - Gives time signal for speech\n   Options: 3, 4, 6, 7, 8, 10';
 const timer_help_3 = " - !start RESUME {LENGTH OF SPEECH} {POI'S START} {POI'S CLOSE}\n - Creates a speech with given parameters, in minutes. (30 sec is 0.5 min)\n POI'S START: How long until poi's are open\n POI'S CLOSE: How long until protected time starts";
 const poll_help = ' - !poll {question} [option1] [option2]\n   Your question and options can be as long as you want. Maximum poll of 20 options';
+const poll_help2 = " - !poll DEBATE\n   Creates a poll with question: What would you like to do for today's meeting?. and options: Anything, Debate, Judge, Vibe";
 const note_help = "**NOTE: ALL COMMANDS WITH PARAMETERS SHOULD HAVE THEIR PARAMETERS SEPARATED WITH ONE SPACE"
 const contact_help = 'If you need any help add me: Spiltbeans#3644';
 const add_bot = 'To add this bot to your server click: https://discordapp.com/oauth2/authorize?client_id=695434891638341733&scope=bot&permissions=8';
 const add_server ="Join the CUDS Discord if you haven't already! https://discord.gg/XGnjJZz";
 const source_code = "You can find the source code here: https://github.com/spiltbeans/NotTDBot";
-const help_response = '+ Commands:\n'+help_help+'\n\n'+timer_help+'\n\n'+timer_help_2+'\n\n'+timer_help_3+'\n\n'+poll_help+'\n\n'+note_help+'\n\n'+"+ Info:\n"+contact_help+'\n\n'+add_bot+'\n\n'+add_server+'\n\n'+source_code;
+const help_response = '+ Commands:\n'+help_help+'\n\n'+timer_help+'\n\n'+timer_help_2+'\n\n'+timer_help_3+'\n\n'+poll_help2+'\n\n'+poll_help+'\n\n'+note_help+'\n\n'+"+ Info:\n"+contact_help+'\n\n'+add_bot+'\n\n'+add_server+'\n\n'+source_code;
 
 //letters enum
 const letters = [
@@ -151,60 +153,41 @@ bot.on('message', msg=>{
             
     }else if(params[0] == 'poll'){ //poll command
 
-        let question = "";     //the question being asked
-        let options = "\n";    //will be the string of options
-        let answers = [];      //list of answers, makes it easier to collect
-        let index = 97;        //ascii value for A. Increments based on options index
-                               // will basically have 65 = A, next option will be 65+1 = B, ....
+        if(params[1] == 'DEBATE'){  //sends a default debate slotting poll if keyword DEBATE
 
-        let emoji_pre = '\:regional_indicator_';
+            poll_response(msg, "What would you like to do for today's meeting?", ["[Anything]", "[Debate]","[Judge]","[Vibe]"]);
+        }else{                      //generates custom poll
 
-        //parsing the poll parameter to isolate: question and options
-        for(var i = 0; i < params.length; i++){
-            if(i != 0){ //skips over keyword "poll"
+            let question = "";     //the question being asked
+            let answers = [];      //list of answers, makes it easier to collect
 
-                //if param in [] - its an option, else its part of the question
-                if(params[i].charAt(0) == '[' && params[i].charAt(params[i].length-1) == ']' ){
-                    answers.push(params[i]);
-                }else{
-                    question+= params[i]+ ' ';
+            //parsing the poll parameter to isolate: question and options
+            for(var i = 0; i < params.length; i++){
+                if(i != 0){ //skips over keyword "poll"
+
+                    //if param in [] - its an option, else its part of the question
+                    if(params[i].charAt(0) == '[' && params[i].charAt(params[i].length-1) == ']' ){
+                        answers.push(params[i]);
+                    }else{
+                        question+= params[i]+ ' ';
+                    }
                 }
+
             }
 
-        }
+            //sends response if there are more than 20 options
+            if(answers.length > 20){
+                msg.channel.send('Cannot make a poll with more than 20 options :(')
+                return;
+            }
 
-        //sends response if there are more than 20 options
-        if(answers.length > 20){
-            msg.channel.send('Cannot make a poll with more than 20 options :(')
-            return;
-        }
+            //remove the {} from question
+            question = question.substring(1, question.length-2);
 
-        //remove the {} from question
-        question = question.substring(1, question.length-2);
-
-        //parse through answers and add to options string, with index
-        for(var i = 0; i < answers.length; i++){
-            let temp = answers[i].charAt(1).toUpperCase()+answers[i].substring(2, answers[i].length-1); //capitalizes the option
-            options+= '\n';
-            options+= (emoji_pre+String.fromCharCode(index)+':'+': '+ temp + '\n');                     //adding the option with the emoji
-            index++;
+            poll_response(msg, question, answers);
         }
         
-        //poll response
-        msg.channel.send({embed: {
-            title:'Poll: '+question,
-            color: 3447003,
-            description: options
-          }}).then(sent =>{
-
-            //add reactions, to do poll things
-            for(var i = 0; i < answers.length; i++){        
-                sent.react(letters[i])
-                
-            }
-            
-            
-        })
+        
         
     }else if(params[0] == 'help'){  //help command
         msg.channel.send({embed: {
@@ -217,6 +200,39 @@ bot.on('message', msg=>{
 });
 
 bot.login(token);       //bot login with token
+
+//function to display the poll
+function poll_response(msg, question, answers){
+    let options = "\n";    //will be the string of options
+    let index = 97;        //ascii value for A. Increments based on options index
+                           // will basically have 65 = A, next option will be 65+1 = B, ....
+
+    let emoji_pre = '\:regional_indicator_';
+
+    //parse through answers and add to options string, with index
+    for(var i = 0; i < answers.length; i++){
+        let temp = answers[i].charAt(1).toUpperCase()+answers[i].substring(2, answers[i].length-1); //capitalizes the option
+        options+= '\n';
+        options+= (emoji_pre+String.fromCharCode(index)+':'+': '+ temp + '\n');                     //adding the option with the emoji
+        index++;
+    }
+    
+    //poll response
+    msg.channel.send({embed: {
+        title:'Poll: '+question,
+        color: 3447003,
+        description: options
+      }}).then(sent =>{
+
+        //add reactions, to do poll things
+        for(var i = 0; i < answers.length; i++){        
+            sent.react(letters[i])
+            
+        }
+        
+        
+    })
+}
 
 //sending out time signals, including grace period
 /**
