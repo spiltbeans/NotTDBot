@@ -9,9 +9,9 @@
 const Discord = require("discord.js");
 const timer = require('timers');
 const bot = new Discord.Client();
-const secrets = require('./secure/secrets');
+// const secrets = require('./secure/secrets');
 
-const token = secrets.token;    //api token
+const token = process.env.TOKEN;    //api token
 const prefix = '!';             //prefix for commands
 
 //convenient time conversions (ms)
