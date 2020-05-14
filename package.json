@@ -4,7 +4,8 @@
   "description": "not a td bot for Carleton University Debate Society",
   "main": "bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node bot.js"
   },
   "repository": {
     "type": "git",
