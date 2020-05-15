@@ -72,7 +72,7 @@ bot.on('message', msg=>{
     
     //command parameter parser
     let params = msg.content.substring(prefix.length).split(' ');
-    
+
     if(msg.content.charAt(0) != prefix){    //return if not a command
         return;
     }
@@ -91,66 +91,49 @@ bot.on('message', msg=>{
             }else{
                 msg.reply("Timer for "+length+" mins started!. Protected time ends in "+poi_start+" mins and will start again in " +protected_start +" mins");
             }
-            
 
-            let openPOI = setTimeout(signal, min*poi_start, msg, 0);
-            let closePOI = setTimeout(signal, (min)*protected_start, msg, 1);
-            let closeSpeech = setTimeout(signal, min*length, msg, 2);
-            let graceFirst = setTimeout(signal, (min*length) + five_seconds, msg, 3);
-            let graceSecond = setTimeout(signal, (min*length) + five_seconds*2, msg, 4);
-            let graceThird = setTimeout(signal, (min*length) + five_seconds*3, msg, 5);
-
+            let openPOI = setTimeout(signal, min*poi_start, msg, 'OPEN');
+            let closePOI = setTimeout(signal, (min)*protected_start, msg, 'CLOSED');
+            time_signal(msg, length);
 
         }else if(params[1]=='{3}'){
             //3 minute speech
             msg.reply("Timer started!: 3 Minute Speech! All protected time!");
-            let closeSpeech = setTimeout(signal, min*3, msg, 2);
-            let graceFirst = setTimeout(signal, (min*3) + five_seconds, msg, 3);
-            let graceSecond = setTimeout(signal, (min*3) + five_seconds*2, msg, 4);
-            let graceThird = setTimeout(signal, (min*3) + five_seconds*3, msg, 5);
+            time_signal(msg, 3);
+
         }else if(params[1]=='{4}'){
             //4 minute speech
             msg.reply("Timer started!: 4 Minute Speech! All protected time!");
-            let closeSpeech = setTimeout(signal, min*4, msg, 2);
-            let graceFirst = setTimeout(signal, (min*4) + five_seconds, msg, 3);
-            let graceSecond = setTimeout(signal, (min*4) + five_seconds*2, msg, 4);
-            let graceThird = setTimeout(signal, (min*4) + five_seconds*3, msg, 5);
+            time_signal(msg, 4);
+
         }else if(params[1]=='{6}'){
             //6 minute speech
             msg.reply("Timer started!: 6 Minute Speech");
-            let openPOI = setTimeout(signal, min/2, msg, 0);
-            let closePOI = setTimeout(signal, ((min*5)+(min/2)), msg, 1);
-            let closeSpeech = setTimeout(signal, min*6, msg, 2);
-            let graceFirst = setTimeout(signal, (min*6) + five_seconds, msg, 3);
-            let graceSecond = setTimeout(signal, (min*6) + five_seconds*2, msg, 4);
-            let graceThird = setTimeout(signal, (min*6) + five_seconds*3, msg, 5);
+            let openPOI = setTimeout(signal, min/2, msg, 'OPEN');
+            let closePOI = setTimeout(signal, ((min*5)+(min/2)), msg, 'CLOSED');
+            time_signal(msg, 6);
+
         }else if(params[1]=='{8}'){
             //8 minute speech
             msg.reply("Timer started!: 8 Minute Speech");
-            let openPOI = setTimeout(signal, min, msg, 0);
-            let closePOI = setTimeout(signal, min*7, msg, 1);
-            let closeSpeech = setTimeout(signal, min*8, msg, 2);
-            let graceFirst = setTimeout(signal, (min*8) + five_seconds, msg, 3);
-            let graceSecond = setTimeout(signal, (min*8) + five_seconds*2, msg, 4);
-            let graceThird = setTimeout(signal, (min*8) + five_seconds*3, msg, 5);
+            let openPOI = setTimeout(signal, min, msg, 'OPEN');
+            let closePOI = setTimeout(signal, min*7, msg, 'CLOSED');
+            time_signal(msg, 8);
+
         }else if(params[1]=='{10}'){
             //10 minute speech
             msg.reply("Timer started!: 10 Minute Speech");
-            let openPOI = setTimeout(signal, min, msg, 0);
-            let closePOI = setTimeout(signal, min*6, msg, 1);
-            let closeSpeech = setTimeout(signal, min*10, msg, 2);
-            let graceFirst = setTimeout(signal, (min*10) + five_seconds, msg, 3);
-            let graceSecond = setTimeout(signal, (min*10) + five_seconds*2, msg, 4);
-            let graceThird = setTimeout(signal, (min*10) + five_seconds*3, msg, 5);
+            let openPOI = setTimeout(signal, min, msg, 'OPEN');
+            let closePOI = setTimeout(signal, min*6, msg, 'CLOSED');
+            time_signal(msg, 10);
+
         }else{
             //7 minute speech
             msg.reply("Timer started!: 7 Minute Speech");
-            let openPOI = setTimeout(signal, min, msg, 0);
-            let closePOI = setTimeout(signal, min*6, msg, 1);
-            let closeSpeech = setTimeout(signal, min*7, msg, 2);
-            let graceFirst = setTimeout(signal, (min*7) + five_seconds, msg, 3);
-            let graceSecond = setTimeout(signal, (min*7) + five_seconds*2, msg, 4);
-            let graceThird = setTimeout(signal, (min*7) + five_seconds*3, msg, 5);
+            let openPOI = setTimeout(signal, min, msg, 'OPEN');
+            let closePOI = setTimeout(signal, min*6, msg, 'CLOSED');
+            time_signal(msg, 7);
+
         }
                 
             
@@ -237,31 +220,38 @@ function poll_response(msg, question, answers){
     })
 }
 
+function time_signal(msg, length){
+    let closeSpeech = setTimeout(signal, min*length, msg, 'END');
+    let graceFirst = setTimeout(signal, (min*length) + five_seconds, msg, 'GRACE1');
+    let graceSecond = setTimeout(signal, (min*length) + five_seconds*2, msg, 'GRACE2');
+    let graceThird = setTimeout(signal, (min*length) + five_seconds*3, msg, 'GRACE3');
+
+}
 //sending out time signals, including grace period
 /**
- * 0 - poi's open msg
- * 1 - poi's close msg
- * 2 - 15 second grace msg
- * 3 - 5 seconds in grade msg
- * 4 - 10 seconds in grace msg
- * 5 - grace over msg
+ * OPEN - poi's open msg
+ * CLOSED - poi's close msg
+ * END - 15 second grace msg
+ * GRACE1 - 5 seconds in grade msg
+ * GRACE2 - 10 seconds in grace msg
+ * GRACE53 - grace over msg
 **/
 function signal(msg, code){
-    if(code == 0){
+    if(code == 'OPEN'){
         msg.reply("POI's Open");
-    }else if(code == 1){
+    }else if(code == 'CLOSED'){
         msg.reply("POI's Closed");
 
-    }else if(code == 2){
+    }else if(code == 'END'){
         msg.reply("Started: 15 Second Grace");
 
-    }else if(code == 3){
+    }else if(code == 'GRACE1'){
         msg.reply("Grace: 5");
 
-    }else if(code == 4){
+    }else if(code == 'GRACE2'){
         msg.reply("Grace: 10");
 
-    }else if(code == 5){
+    }else if(code == 'GRACE3'){
         msg.reply("Grace Over!");
         msg.reply("*table bang* *table bang*");
     }
