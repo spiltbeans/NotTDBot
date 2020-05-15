@@ -72,7 +72,10 @@ bot.on('message', msg=>{
     
     //command parameter parser
     let params = msg.content.substring(prefix.length).split(' ');
-
+    
+    if(msg.content.charAt(0) != prefix){    //return if not a command
+        return;
+    }
     //command handler
     if(params[0] == 'start'){   //timer command
 
