@@ -22,7 +22,7 @@ const five_seconds = 5000;
 //help response string
 const help_help = ' - !help - provides commands';
 const timer_help = ' - !start - Gives time signal for a 7 minute speech';
-const timer_help_2 = ' - !start {LENGTH OF SPEECH} - Gives time signal for speech\n   Options: 3, 4, 6, 7, 8, 10';
+const timer_help_2 = ' - !start {LENGTH OF SPEECH} - Gives time signal for speech\n   Options: 3, 4, 5, 6, 7, 8, 10';
 const timer_help_3 = " - !start RESUME {LENGTH OF SPEECH} {POI'S START} {POI'S CLOSE}\n - Creates a speech with given parameters, in minutes. (30 sec is 0.5 min)\n POI'S START: How long until poi's are open\n POI'S CLOSE: How long until protected time starts";
 const poll_help = ' - !poll {question} [option1] [option2]\n   Your question and options can be as long as you want. Maximum poll of 20 options';
 const poll_help2 = " - !poll DEBATE\n   Creates a poll with question: What would you like to do for today's meeting?. and options: Anything, Debate, Judge, Vibe";
@@ -106,6 +106,12 @@ bot.on('message', msg=>{
             msg.reply("Timer started!: 4 Minute Speech! All protected time!");
             time_signal(msg, 4);
 
+        }else if(params[1]=='{5}'){
+            //6 minute speech
+            msg.reply("Timer started!: 5 Minute Speech");
+            let openPOI = setTimeout(signal, min/2, msg, 'OPEN');
+            let closePOI = setTimeout(signal, ((min*4)+(min/2)), msg, 'CLOSED');
+            time_signal(msg, 5);
         }else if(params[1]=='{6}'){
             //6 minute speech
             msg.reply("Timer started!: 6 Minute Speech");
