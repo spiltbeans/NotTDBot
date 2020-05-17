@@ -1,7 +1,7 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 2.1
+ * version: 2.2
  * 05/13/2020
  */
 
@@ -23,13 +23,13 @@ const five_seconds = 5000;
 const help_help = ' - !help - provides commands';
 const timer_help = ' - !start - Gives time signal for a 7 minute speech';
 const timer_help_2 = ' - !start {LENGTH OF SPEECH} - Gives time signal for speech\n   Options: 3, 4, 5, 6, 7, 8, 10';
-const timer_help_3 = " - !start RESUME {LENGTH OF SPEECH} {POI'S START} {POI'S CLOSE}\n - Creates a speech with given parameters, in minutes. (30 sec is 0.5 min)\n POI'S START: How long until poi's are open\n POI'S CLOSE: How long until protected time starts";
+const timer_help_3 = " - !start CUSTOM {LENGTH OF SPEECH} {POI'S START} {POI'S CLOSE}\n - Creates a speech with given parameters, in minutes (positive integers or decimals). (30 sec is 0.5 min)\n POI'S START: How long until poi's are open\n POI'S CLOSE: How long until protected time starts";
 const poll_help = ' - !poll {question} [option1] [option2]\n   Your question and options can be as long as you want. Maximum poll of 20 options';
 const poll_help2 = " - !poll DEBATE\n   Creates a poll with question: What would you like to do for today's meeting?. and options: Anything, Debate, Judge, Vibe";
 const note_help = "**NOTE: ALL COMMANDS WITH PARAMETERS SHOULD HAVE THEIR PARAMETERS SEPARATED WITH ONE SPACE"
 const contact_help = 'If you need any help add me: Spiltbeans#3644';
 const add_bot = 'To add this bot to your server click: https://discordapp.com/oauth2/authorize?client_id=695434891638341733&scope=bot&permissions=8';
-const add_server ="Join the CUDS Discord if you haven't already! https://discord.gg/XGnjJZz";
+const add_server ="Join the CUDS Discord if you haven't already! https://discord.gg/Sxn7gyS";
 const source_code = "You can find the source code here: https://github.com/spiltbeans/NotTDBot";
 const help_response = '+ Commands:\n'+help_help+'\n\n'+timer_help+'\n\n'+timer_help_2+'\n\n'+timer_help_3+'\n\n'+poll_help2+'\n\n'+poll_help+'\n\n'+note_help+'\n\n'+"+ Info:\n"+contact_help+'\n\n'+add_bot+'\n\n'+add_server+'\n\n'+source_code;
 
@@ -78,69 +78,105 @@ bot.on('message', msg=>{
     }
     //command handler
     if(params[0] == 'start'){   //timer command
-
-        if(params[1] == 'RESUME'){  //start at any time
-            //!start {} {length} {poi_start} {protected_start}
-
-            let length = parseFloat(params[2].substring(1, params[2].length -1));               //full length of the speech
-            let poi_start = parseFloat(params[3].substring(1, params[3].length -1));            //what time the poi's open up
-            let protected_start = parseFloat(params[4].substring(1, params[4].length -1));      //what time protected time starts
-
-            if(poi_start == 0){
-                msg.reply("Timer for "+length+" mins started!. POI's open. Protected time start in " +protected_start +" mins");
-            }else{
-                msg.reply("Timer for "+length+" mins started!. Protected time ends in "+poi_start+" mins and will start again in " +protected_start +" mins");
-            }
-
-            let openPOI = setTimeout(signal, min*poi_start, msg, 'OPEN');
-            let closePOI = setTimeout(signal, (min)*protected_start, msg, 'CLOSED');
-            time_signal(msg, length);
-
-        }else if(params[1]=='{3}'){
-            //3 minute speech
-            msg.reply("Timer started!: 3 Minute Speech! All protected time!");
-            time_signal(msg, 3);
-
-        }else if(params[1]=='{4}'){
-            //4 minute speech
-            msg.reply("Timer started!: 4 Minute Speech! All protected time!");
-            time_signal(msg, 4);
-
-        }else if(params[1]=='{5}'){
-            //6 minute speech
-            msg.reply("Timer started!: 5 Minute Speech");
-            let openPOI = setTimeout(signal, min/2, msg, 'OPEN');
-            let closePOI = setTimeout(signal, ((min*4)+(min/2)), msg, 'CLOSED');
-            time_signal(msg, 5);
-        }else if(params[1]=='{6}'){
-            //6 minute speech
-            msg.reply("Timer started!: 6 Minute Speech");
-            let openPOI = setTimeout(signal, min/2, msg, 'OPEN');
-            let closePOI = setTimeout(signal, ((min*5)+(min/2)), msg, 'CLOSED');
-            time_signal(msg, 6);
-
-        }else if(params[1]=='{8}'){
-            //8 minute speech
-            msg.reply("Timer started!: 8 Minute Speech");
-            let openPOI = setTimeout(signal, min, msg, 'OPEN');
-            let closePOI = setTimeout(signal, min*7, msg, 'CLOSED');
-            time_signal(msg, 8);
-
-        }else if(params[1]=='{10}'){
-            //10 minute speech
-            msg.reply("Timer started!: 10 Minute Speech");
-            let openPOI = setTimeout(signal, min, msg, 'OPEN');
-            let closePOI = setTimeout(signal, min*6, msg, 'CLOSED');
-            time_signal(msg, 10);
-
-        }else{
+        if(params.length == 1){ //start having no parameters
             //7 minute speech
             msg.reply("Timer started!: 7 Minute Speech");
             let openPOI = setTimeout(signal, min, msg, 'OPEN');
             let closePOI = setTimeout(signal, min*6, msg, 'CLOSED');
             time_signal(msg, 7);
+            return;
 
+        }else if(params.length == 2){   //start having more than one parameter
+
+            if(params[1]=='{3}'){
+                //3 minute speech
+                msg.reply("Timer started!: 3 Minute Speech! All protected time!");
+                time_signal(msg, 3);
+                return;
+
+            }else if(params[1]=='{4}'){
+                //4 minute speech
+                msg.reply("Timer started!: 4 Minute Speech! All protected time!");
+                time_signal(msg, 4);
+                return;
+
+            }else if(params[1]=='{5}'){
+                //6 minute speech
+                msg.reply("Timer started!: 5 Minute Speech");
+                let openPOI = setTimeout(signal, min/2, msg, 'OPEN');
+                let closePOI = setTimeout(signal, ((min*4)+(min/2)), msg, 'CLOSED');
+                time_signal(msg, 5);
+                return;
+
+            }else if(params[1]=='{6}'){
+                //6 minute speech
+                msg.reply("Timer started!: 6 Minute Speech");
+                let openPOI = setTimeout(signal, min/2, msg, 'OPEN');
+                let closePOI = setTimeout(signal, ((min*5)+(min/2)), msg, 'CLOSED');
+                time_signal(msg, 6);
+                return;
+
+            }else if(params[1]=='{8}'){
+                //8 minute speech
+                msg.reply("Timer started!: 8 Minute Speech");
+                let openPOI = setTimeout(signal, min, msg, 'OPEN');
+                let closePOI = setTimeout(signal, min*7, msg, 'CLOSED');
+                time_signal(msg, 8);
+                return;
+
+            }else if(params[1]=='{10}'){
+                //10 minute speech
+                msg.reply("Timer started!: 10 Minute Speech");
+                let openPOI = setTimeout(signal, min, msg, 'OPEN');
+                let closePOI = setTimeout(signal, min*6, msg, 'CLOSED');
+                time_signal(msg, 10);
+                return;
+
+            }else if(params[1] == '{7}'){
+                //7 minute speech
+                msg.reply("Timer started!: 7 Minute Speech");
+                let openPOI = setTimeout(signal, min, msg, 'OPEN');
+                let closePOI = setTimeout(signal, min*6, msg, 'CLOSED');
+                time_signal(msg, 7);
+                return;
+    
+            }
+        }else{      //start having more than 2 parameters
+
+            if(params[1] == 'CUSTOM'){  //timer with custom time-signals
+                //!start CUSTOM {length} {poi_start} {protected_start}
+
+                if(params.length == 5){ //needs 5 pieces of information
+                    let temp_length = params[2].substring(1, params[2].length -1);
+                    let temp_poi_st = params[3].substring(1, params[3].length -1);
+                    let temp_prot_st = params[4].substring(1, params[4].length -1);
+
+                    if(typeof temp_length == 'number' && typeof temp_poi_st == 'number' && typeof temp_prot_st == 'number'){    //proceed if parameters are numbers
+                        let length = parseFloat(temp_length);               //full length of the speech
+                        let poi_start = parseFloat(temp_poi_st);            //what time the poi's open up
+                        let protected_start = parseFloat(temp_prot_st);      //what time protected time starts
+            
+                        if(poi_start == 0){
+                            msg.reply("Timer for "+length+" mins started!. POI's open. Protected time start in " +protected_start +" mins");
+                        }else{
+                            msg.reply("Timer for "+length+" mins started!. Protected time ends in "+poi_start+" mins and will start again in " +protected_start +" mins");
+                        }
+            
+                        let openPOI = setTimeout(signal, min*poi_start, msg, 'OPEN');
+                        let closePOI = setTimeout(signal, (min)*protected_start, msg, 'CLOSED');
+                        time_signal(msg, length);
+                        return;
+                    }else{
+                        msg.reply("Sorry, could not make timer. One or more parameters are not numbers :(");
+                        return;
+                    }
+                    
+                }
+    
+            }
+            
         }
+        msg.reply("Sorry, but that is not a recognized command. Please type !help if you need any help with commands :)");
                 
             
     }else if(params[0] == 'poll'){ //poll command
@@ -182,11 +218,16 @@ bot.on('message', msg=>{
         
         
     }else if(params[0] == 'help'){  //help command
-        msg.channel.send({embed: {
-            color: 3447003,
-            title: 'Help Page',
-            description: help_response,
-        }})
+        if(params.length == 1){
+            msg.channel.send({embed: {
+                color: 3447003,
+                title: 'Help Page',
+                description: help_response,
+            }})
+        }else{
+            return
+        }
+        
         
     }
 });
