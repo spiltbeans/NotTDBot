@@ -1,7 +1,7 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 2.2
+ * version: 2.3
  * 05/13/2020
  */
 
@@ -155,7 +155,15 @@ bot.on('message', msg=>{
                         let length = parseFloat(temp_length);               //full length of the speech
                         let poi_start = parseFloat(temp_poi_st);            //what time the poi's open up
                         let protected_start = parseFloat(temp_prot_st);      //what time protected time starts
-            
+                        if(protected_start >= length){
+                            msg.reply("Could not make custom timer: looks like your protected time will start after pr at the same time as when your speech is finished... I mean, I guess thats not entirely wrong, but...");
+                            return;
+                        }
+                        if(poi_start >= protected_start){
+                            msg.reply("Could not make custom timer: looks like your poi's will start after or at the same time as when your protected time starts");
+                            return;
+                        }
+                        
                         if(poi_start == 0){
                             msg.reply("Timer for "+length+" mins started!. POI's open. Protected time start in " +protected_start +" mins");
                         }else{
