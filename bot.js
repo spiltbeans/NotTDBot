@@ -150,11 +150,13 @@ bot.on('message', msg=>{
                     let temp_length = params[2].substring(1, params[2].length -1);
                     let temp_poi_st = params[3].substring(1, params[3].length -1);
                     let temp_prot_st = params[4].substring(1, params[4].length -1);
-
-                    if(typeof temp_length == 'number' && typeof temp_poi_st == 'number' && typeof temp_prot_st == 'number'){    //proceed if parameters are numbers
-                        let length = parseFloat(temp_length);               //full length of the speech
-                        let poi_start = parseFloat(temp_poi_st);            //what time the poi's open up
-                        let protected_start = parseFloat(temp_prot_st);      //what time protected time starts
+                    let length = parseFloat(temp_length);               //full length of the speech
+                    let poi_start = parseFloat(temp_poi_st);            //what time the poi's open up
+                    let protected_start = parseFloat(temp_prot_st);      //what time protected time starts
+                    
+                    
+                    if(temp_length == length.toString() && temp_poi_st == poi_start.toString() && temp_prot_st == protected_start.toString()){    //proceed if parameters are numbers
+ 
                         if(protected_start >= length){
                             msg.reply("Could not make custom timer: looks like your protected time will start after pr at the same time as when your speech is finished... I mean, I guess thats not entirely wrong, but...");
                             return;
@@ -236,8 +238,16 @@ bot.on('message', msg=>{
             return
         }
         
-        
     }
+    // }else if(params[0] == 'terminate'){
+    //     if(params.length == 2){
+    //         if(params[1] == secrets.terminate_key){
+    //             bot.logout(token);
+    //         }
+    //     }else{
+    //         return
+    //     }
+    // }
 });
 
 bot.login(token);       //bot login with token
