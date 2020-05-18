@@ -24,7 +24,7 @@ const help_help = ' - !help - provides commands';
 const timer_help = ' - !start - Gives time signal for a 7 minute speech';
 const timer_help_2 = ' - !start {LENGTH OF SPEECH} - Gives time signal for speech\n   Options: 3, 4, 5, 6, 7, 8, 10';
 const timer_help_3 = " - !start CUSTOM {LENGTH OF SPEECH} {POI'S START} {POI'S CLOSE}\n - Creates a speech with given parameters, in minutes (positive integers or decimals). (30 sec is 0.5 min)\n POI'S START: How long until poi's are open\n POI'S CLOSE: How long until protected time starts";
-const poll_help = ' - !poll {question} [option1] [option2]\n   Your question and options can be as long as you want. Maximum poll of 20 options';
+const poll_help = ' - !poll {question} [option1] [option2]\n   Your question and options can be as long as you want. Maximum poll of 20 options\nIf you have no option, a "yes" and "no" poll will be generated';
 const poll_help2 = " - !poll DEBATE\n   Creates a poll with question: What would you like to do for today's meeting?. and options: Anything, Debate, Judge, Vibe";
 const note_help = "**NOTE: ALL COMMANDS WITH PARAMETERS SHOULD HAVE THEIR PARAMETERS SEPARATED WITH ONE SPACE"
 const contact_help = 'If you need any help add me: Spiltbeans#3644';
@@ -156,23 +156,29 @@ bot.on('message', msg=>{
                     
                     
                     if(temp_length == length.toString() && temp_poi_st == poi_start.toString() && temp_prot_st == protected_start.toString()){    //proceed if parameters are numbers
- 
                         if(protected_start >= length){
-                            msg.reply("Could not make custom timer: looks like your protected time will start after pr at the same time as when your speech is finished... I mean, I guess thats not entirely wrong, but...");
+                            msg.reply("Could not make custom timer: looks like your protected time will start after or at the same time as when your speech is finished... I mean, I guess thats not entirely wrong, but...");
                             return;
                         }
-                        if(poi_start >= protected_start){
-                            msg.reply("Could not make custom timer: looks like your poi's will start after or at the same time as when your protected time starts");
-                            return;
+                                 
+                        if(poi_start == 0){
+                            if(protected_start == 0){
+                                msg.reply("Timer for "+length+" mins started!. Looks like the entire speech is protected time :)")
+                            }else{
+                                msg.reply("Timer for "+length+" mins started!. POI's open. Protected time start in " +protected_start +" mins");
+                                let openPOI = setTimeout(signal, min*poi_start, msg, 'OPEN');
+                            }
+                            
+                        }else{
+                            if(poi_start >= protected_start){
+                                msg.reply("Could not make custom timer: looks like your poi's will start after or at the same time as when your protected time starts");
+                                return;
+                            }
+                            msg.reply("Timer for "+length+" mins started!. Protected time ends in "+poi_start+" mins and will start again in " +protected_start +" mins");
+                            let openPOI = setTimeout(signal, min*poi_start, msg, 'OPEN');
                         }
                         
-                        if(poi_start == 0){
-                            msg.reply("Timer for "+length+" mins started!. POI's open. Protected time start in " +protected_start +" mins");
-                        }else{
-                            msg.reply("Timer for "+length+" mins started!. Protected time ends in "+poi_start+" mins and will start again in " +protected_start +" mins");
-                        }
-            
-                        let openPOI = setTimeout(signal, min*poi_start, msg, 'OPEN');
+                        
                         let closePOI = setTimeout(signal, (min)*protected_start, msg, 'CLOSED');
                         time_signal(msg, length);
                         return;
@@ -190,29 +196,48 @@ bot.on('message', msg=>{
                 
             
     }else if(params[0] == 'poll'){ //poll command
+        /**poll logic */
 
-        if(params[1] == 'DEBATE'){  //sends a default debate slotting poll if keyword DEBATE
+        //collect question
+        //collect answers
 
-            poll_response(msg, "What would you like to do for today's meeting?", ["[Anything]", "[Debate]","[Judge]","[Vibe]"]);
-        }else{                      //generates custom poll
+        //is the question is question format - might be preset
+            
+            //if in question format 
+                //if there are answers
+                    //do the poll with given question and answers
+                //else
+                    //do poll with yes and no
+        //if no
+            //if a preset, do a preset poll
 
-            let question = "";     //the question being asked
-            let answers = [];      //list of answers, makes it easier to collect
+        if(params.length == 1){ //if command only
+             msg.reply("Sorry, could not make poll. Your poll has no questions or options :(")
+             return;
+        }
+        let question = "";     //the question being asked
+        let answers = [];      //list of answers, makes it easier to collect
 
-            //parsing the poll parameter to isolate: question and options
-            for(var i = 0; i < params.length; i++){
-                if(i != 0){ //skips over keyword "poll"
+        //parsing the poll parameter to isolate: question and options
+        for(var i = 0; i < params.length; i++){
+            if(i != 0){ //skips over keyword "poll"
 
-                    //if param in [] - its an option, else its part of the question
-                    if(params[i].charAt(0) == '[' && params[i].charAt(params[i].length-1) == ']' ){
-                        answers.push(params[i]);
-                    }else{
-                        question+= params[i]+ ' ';
-                    }
+                //if param in [] - its an option, else its part of the question
+                if(params[i].charAt(0) == '[' && params[i].charAt(params[i].length-1) == ']' ){
+                    answers.push(params[i]);
+                }else{
+                    question+= params[i]+ ' ';
                 }
-
             }
 
+        }
+        
+
+        if(question.charAt(0) == '{' && question.charAt(question.length-2) == '}'){ // if in question format
+            if(answers.length == 0){
+                answers.push('[Yes]');
+                answers.push('[No]');
+            }
             //sends response if there are more than 20 options
             if(answers.length > 20){
                 msg.channel.send('Cannot make a poll with more than 20 options :(')
@@ -223,6 +248,16 @@ bot.on('message', msg=>{
             question = question.substring(1, question.length-2);
 
             poll_response(msg, question, answers);
+            return;
+        }else{
+            let preset = question.substring(0, question.length-1);
+            if(preset == 'DEBATE'){
+                poll_response(msg, "What would you like to do for today's meeting?", ["[Anything]", "[Debate]","[Judge]","[Vibe]"]);
+                return;
+            }else{
+                msg.reply("Sorry, could not make poll. Poll preset not recognized :(");
+                return;
+            }
         }
         
         
