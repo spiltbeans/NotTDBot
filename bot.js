@@ -1,7 +1,7 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 2.3
+ * version: 2.4
  * 05/13/2020
  */
 
