@@ -70,7 +70,7 @@ module.exports = class Help extends Commands{
                     description:"Pauses a timer currently running",
                     category: 'Timer',
                     usage: "\n\n- !pause \n\n OR \n\n- !pause {TIMER INDEX}",
-                    presets: "\n\n- {TIMER INDEX} - Options: displayed when you type '!pause'"
+                    presets: "\n\n- {TIMER INDEX} - If more than one timer running, options: displayed when you type '!pause'"
                 }
                 return message.channel.send({embed: {
                     color: 3447003,
@@ -84,7 +84,7 @@ module.exports = class Help extends Commands{
                     description:"Resumes a timer currently paused",
                     category: 'Timer',
                     usage: "\n\n- !resume \n\n OR \n\n- !resume {TIMER INDEX}",
-                    presets: "\n\n- {TIMER INDEX} - Options: displayed when you type '!resume'"
+                    presets: "\n\n- {TIMER INDEX} - If more than one timer paused, options: displayed when you type '!resume'"
                 }
                 return message.channel.send({embed: {
                     color: 3447003,
@@ -97,7 +97,7 @@ module.exports = class Help extends Commands{
                     description:"Kills a timer currently owned by user",
                     category: 'Timer',
                     usage: "\n\n- !end \n\n OR \n\n- !end {TIMER INDEX}",
-                    presets: "\n\n- {TIMER INDEX} - Options: displayed when you type '!end'"
+                    presets: "\n\n- {TIMER INDEX} - If more than one timer owned by user, options: displayed when you type '!end'"
                 }
                 return message.channel.send({embed: {
                     color: 3447003,
