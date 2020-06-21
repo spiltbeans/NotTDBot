@@ -11,7 +11,7 @@ module.exports = class Developer extends Command{
         })
     }
     async execute(message, args){
-        if(message.author.id == args[args.length-1].bot_owner){
+        if(message.author.id == process.env.bot_owner){
             if(args.length < 3){
                 return message.reply('You need a command, King'); 
             }else if(args.length == 3){

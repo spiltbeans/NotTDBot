@@ -9,7 +9,7 @@
 //requires
 const Discord = require("discord.js");
 const bot = new Discord.Client();
-const secrets = require('./secure/secrets');
+//const secrets = require('./secure/secrets');
 
 const fs = require('fs');
 
@@ -53,7 +53,7 @@ bot.on('message', async msg=>{
         bot.commands.get('help').execute(msg, params);
         
     }else if(params[0] == 'dev'){ //developer commands
-        params.push(secrets)
+        
         bot.commands.get('developer').execute(msg, params);
     }
 });
