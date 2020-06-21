@@ -1,6 +1,6 @@
 {
   "name": "nottdbot",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "not a td bot for Carleton University Debate Society",
   "main": "bot.js",
   "scripts": {
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/spiltbeans/NotTDBot#readme",
   "dependencies": {
     "discord.js": "^12.1.1",
+    "fs": "0.0.1-security",
     "timer": "^1.0.1",
     "timers.js": "^1.1.10"
   }
