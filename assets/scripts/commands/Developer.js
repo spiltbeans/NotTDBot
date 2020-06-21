@@ -12,9 +12,9 @@ module.exports = class Developer extends Command{
     }
     async execute(message, args){
         if(message.author.id == process.env.bot_owner){
-            if(args.length < 3){
+            if(args.length < 2){
                 return message.reply('You need a command, King'); 
-            }else if(args.length == 3){
+            }else if(args.length == 2){
 
                 if(args[1] == 'terminate'){
                     await message.reply('Bot shutting down...');
