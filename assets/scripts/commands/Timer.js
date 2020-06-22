@@ -174,19 +174,20 @@ function pauseTimer(message, t, args){
          */
         let run = 0;
         let res = "";
+        let index = 0;
         for(var i = 0; i < t.length; i++){
             if(t[i].running){
                 run++;
                 res+= " {"+i+"} - "+ t[i].speechLength + " minute speech; Currently at " + Math.trunc(t[i].count/60) + " : " + t[i].count%60 + " minutes.\n\n"
-
+                index = i;
             }
         }
         res += "To pause a timer, type '+pause {TIMER INDEX}' - index refers to the order of the timers you own";
 
         //if there is only one timer running, pause it
         if(run == 1){
-            message.reply(message.author.username + "'s timer paused!; Currently at " + Math.trunc(t[0].count/60) + " : " + t[0].count%60 + " minutes.")
-            return t[0].pause();
+            message.reply(message.author.username + "'s timer paused!; Currently at " + Math.trunc(t[index].count/60) + " : " + t[index].count%60 + " minutes.")
+            return t[index].pause();
             
         }else if(run == 0){
             return message.reply("You have no timers currently ticking.")
@@ -231,19 +232,20 @@ function resumeTimer(message, t, args){
          */
         let not_run = 0;
         let res = "";
+        let index = 0;
         for(var i = 0; i < t.length; i++){
             if(!t[i].running){
                 not_run++;
                 res+= " {"+i+"} - "+ t[i].speechLength + " minute speech; Currently at " + Math.trunc(t[i].count/60) + " : " + t[i].count%60 + " minutes.\n\n"
-
+                index = i;
             }
         }
         res += "To resume a timer, type '+resume {TIMER INDEX}' - index refers to the order of the timers you own";
 
         //if there is only one timer paused, resume it
         if(not_run == 1){
-            message.reply(message.author.username + "'s timer resumed!; Currently at " + Math.trunc(t[0].count/60) + " : " + t[0].count%60 + " minutes.")
-            return t[0].start();
+            message.reply(message.author.username + "'s timer resumed!; Currently at " + Math.trunc(t[index].count/60) + " : " + t[index].count%60 + " minutes.")
+            return t[index].start();
             
         }else if(not_run == 0){
             return message.reply("You have no timers currently paused.")
