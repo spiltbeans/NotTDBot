@@ -1,6 +1,6 @@
 
 //help response string
-const note_help = "****NOTE: ALL COMMANDS WITH PARAMETERS SHOULD HAVE THEIR PARAMETERS SEPARATED WITH ONE SPACE**"
+const note_help = "****NOTE: COMMANDS ARE CASE SENSITIVE AND ALL COMMANDS WITH PARAMETERS SHOULD HAVE THEIR PARAMETERS SEPARATED WITH ONE SPACE**"
 const help_help = ' - +help - provides commands. You can type "+help {command/category}" for more information on a command.';
 const start_help = ' - +start - Gives time signal for a 7 minute speech.';
 const resume_help = ' - +resume - resumes a paused timer.';
@@ -10,7 +10,7 @@ const add_bot = 'To add this bot to your server click https://discordapp.com/oau
 
 const contact_help = 'If you need any help add me: Spiltbeans#3644';
 const add_server ="Join the CUDS Discord if you haven't already! https://discord.gg/Sxn7gyS";
-const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 3.1";
+const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 3.2";
 
 const help_response = note_help + '\n\n**Commonly used:**\n' + help_help + '\n\n' + start_help+ '\n\n' + resume_help+ '\n\n' + pause_help + '\n\n' + poll_help + '\n\n**Categories:**\n - timer - Category for all timer commands \n - poll - Category for all poll commands\n - contact - Category for contact information! \n\n' + add_bot;
 
