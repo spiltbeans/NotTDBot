@@ -1,4 +1,4 @@
-//msg.reply("Sorry, but that is not a recognized command. Please type !help if you need any help with commands :)");
+//msg.reply("Sorry, but that is not a recognized command. Please type +help if you need any help with commands :)");
 const Command = require('./Command')
 
 //convenient time conversions (ms)           
@@ -88,7 +88,7 @@ module.exports = class Timer extends Command{
             name:'timer',
             description:"Creates a timer to give time signals for a debate speech",
             category: 'Timer',
-            usage: "\n\n- !start \n\n- !pause \n\n- !resume \n\n- !end \n\n- !timers",
+            usage: "\n\n- +start \n\n- +pause \n\n- +resume \n\n- +end \n\n- +timers",
             presets: ""
         })
     }
@@ -166,7 +166,7 @@ function tickTimer(t){
 
 //pause a given timer
 function pauseTimer(message, t, args){
-    //if there are no !pause parameters
+    //if there are no +pause parameters
     if(args.length == 1){
 
         /**
@@ -181,7 +181,7 @@ function pauseTimer(message, t, args){
 
             }
         }
-        res += "To pause a timer, type '!pause {TIMER INDEX}'";
+        res += "To pause a timer, type '+pause {TIMER INDEX}' - index refers to the order of the timers you own";
 
         //if there is only one timer running, pause it
         if(run == 1){
@@ -195,7 +195,7 @@ function pauseTimer(message, t, args){
             return message.reply(" You Have " + run + " timers running:\n" + res);
         }
     
-    //if there are parameters on the !pause command
+    //if there are parameters on the +pause command
     }else if(args.length == 2){
         //extract number from the parameters
         let temp_index = args[1].substring(1, args[1].length -1);
@@ -223,7 +223,7 @@ function pauseTimer(message, t, args){
 }
 
 function resumeTimer(message, t, args){
-    //if there are no !resume parameters
+    //if there are no +resume parameters
     if(args.length == 1){
 
         /**
@@ -238,7 +238,7 @@ function resumeTimer(message, t, args){
 
             }
         }
-        res += "To resume a timer, type '!resume {TIMER INDEX}'";
+        res += "To resume a timer, type '+resume {TIMER INDEX}' - index refers to the order of the timers you own";
 
         //if there is only one timer paused, resume it
         if(not_run == 1){
@@ -252,7 +252,7 @@ function resumeTimer(message, t, args){
             return message.reply(" You Have " + not_run + " timers paused:\n" + res);
         }
     
-    //if there are parameters on the !resume command
+    //if there are parameters on the +resume command
     }else if(args.length == 2){
         //extract number from the parameters
         let temp_index = args[1].substring(1, args[1].length -1);
@@ -279,7 +279,7 @@ function resumeTimer(message, t, args){
 
 
 function killTimer(message, t, args){
-    //if there are no !end parameters
+    //if there are no +end parameters
     if(args.length == 1){
 
         /**
@@ -296,7 +296,7 @@ function killTimer(message, t, args){
             }
             timer_count++;
         }
-        res += "To kill a timer, type '!end {TIMER INDEX}'";
+        res += "To kill a timer, type '+end {TIMER INDEX}' - index refers to the order of the timers you own";
         
         //if there is only one timer end it
         if(timer_count == 1){
@@ -311,7 +311,7 @@ function killTimer(message, t, args){
         }
 
             
-    //if there are parameters on the !resume command
+    //if there are parameters on the +end command
     }else if(args.length == 2){
         //extract number from the parameters
         let temp_index = args[1].substring(1, args[1].length -1);
@@ -422,7 +422,7 @@ function processTimer(message, args){
     }else{      //start having more than 2 parameters
 
         if(args[1] == 'CUSTOM'){  //timer with custom time-signals
-            //!start CUSTOM {length} {poi_start} {protected_start}
+            //+start CUSTOM {length} {poi_start} {protected_start}
 
             if(args.length == 5){ //needs 5 pieces of information
                 let temp_length = args[2].substring(1, args[2].length -1);

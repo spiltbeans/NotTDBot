@@ -4,7 +4,10 @@
  * version: 3.0
  * 06/16/2020
  */
-
+/**
+ * TOOD: motion bank
+ * TODO: dev stop timers
+ */
 
 //requires
 const Discord = require("discord.js");
@@ -25,12 +28,12 @@ for(const file of commandFiles){
 //const token = secrets.token;    //api token
 //const token = secrets.test_token;
 const token = process.env.TOKEN;    //api token
-const prefix = '!';             //prefix for commands
+const prefix = '+';             //prefix for commands
 
 //bot online
 bot.on('ready', ()=>{
     console.log("This bot is online!");
-    bot.user.setActivity('a Fire Speech {!help}', {type: 'LISTENING'}).catch(console.error)
+    bot.user.setActivity('a Fire Speech {'+prefix+'help}', {type: 'LISTENING'}).catch(console.error)
 });
 
 //command handler

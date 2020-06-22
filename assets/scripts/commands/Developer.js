@@ -6,7 +6,7 @@ module.exports = class Developer extends Command{
             name:'dev',
             description:'Commands to for the developer',
             category: 'Developer',
-            usage: '!dev',
+            usage: '+dev',
             presets: "**Commands:**\n- terminate - shut down bot\n\n - servers - list host servers for bot\n\n - wake - just checking in\n\n - commands - display commands"
         })
     }
@@ -24,7 +24,7 @@ module.exports = class Developer extends Command{
                     let servers = "";
                     this.bot.guilds.cache.forEach(function(guildMember, guildMemberId) {
                         console.log("Server Name: " + guildMember.name + ", Server ID: "+ guildMemberId);
-                        servers += guildMember.name + "; ";
+                        servers += guildMember.name + "; \n";
                     })
                     return message.reply(servers); 
 

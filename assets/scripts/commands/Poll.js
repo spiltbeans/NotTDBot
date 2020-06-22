@@ -34,7 +34,7 @@ module.exports = class Poll extends Command{
             name:'poll',
             description:'Creates a poll with custom question and answers.\n   Your question and options can be as long as you want. Maximum poll of 20 options\nIf you have no option, a "yes" and "no" poll will be generated',
             category: 'Poll',
-            usage: '!poll {question} [option1] [option2]',
+            usage: '+poll {question} [option1] [option2]',
             presets: "DEBATE - Creates a poll with question: What would you like to do for today's meeting?. with options: Anything, Debate, Judge, Vibe."
             
         })
