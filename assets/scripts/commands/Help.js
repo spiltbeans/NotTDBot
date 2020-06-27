@@ -10,7 +10,7 @@ const add_bot = 'To add this bot to your server click https://discordapp.com/oau
 
 const contact_help = 'If you need any help add me: Spiltbeans#3644';
 const add_server ="Join the CUDS Discord if you haven't already! https://discord.gg/Sxn7gyS";
-const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 3.2";
+const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 3.3";
 
 const help_response = note_help + '\n\n**Commonly used:**\n' + help_help + '\n\n' + start_help+ '\n\n' + resume_help+ '\n\n' + pause_help + '\n\n' + poll_help + '\n\n**Categories:**\n - timer - Category for all timer commands \n - poll - Category for all poll commands\n - contact - Category for contact information! \n\n' + add_bot;
 
@@ -111,6 +111,32 @@ module.exports = class Help extends Commands{
                     category: 'Timer',
                     usage: "\n\n- +timers",
                     presets: ""
+                }
+                return message.channel.send({embed: {
+                    color: 3447003,
+                    title: b.category,
+                    description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
+                }})
+            }else if(args[1] == '{forward}'){
+                let b = {
+                    name: "forward",
+                    description:"Fast forward a timer currently owned by user",
+                    category: 'Timer',
+                    usage: "\n\n- +forward {TIME} \n\n OR \n\n- +forward {TIME} {TIMER INDEX}",
+                    presets: "\n\n- {TIME} - The amount of seconds you want to fast forward the timer \n\n- {TIMER INDEX} - If more than one timer owned by user, options: displayed when you type '+forward'"
+                }
+                return message.channel.send({embed: {
+                    color: 3447003,
+                    title: b.category,
+                    description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
+                }})
+            }else if(args[1] == '{rewind}'){
+                let b = {
+                    name: "rewind",
+                    description:"Rewind a timer currently owned by user",
+                    category: 'Timer',
+                    usage: "\n\n- +rewind {TIME} \n\n OR \n\n- +rewind {TIME} {TIMER INDEX}",
+                    presets: "\n\n- {TIME} - The amount of seconds you want to rewind the timer \n\n- {TIMER INDEX} - If more than one timer owned by user, options: displayed when you type '+rewind'"
                 }
                 return message.channel.send({embed: {
                     color: 3447003,

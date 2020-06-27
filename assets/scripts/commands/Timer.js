@@ -51,6 +51,29 @@ class Timer{
         removeTimer(this.message, this.id);
         
     }
+
+    //function that either rolls the counter forward or backwards
+    roll(time){
+        
+        if(time < 0){
+            if(Math.abs(time) > this.count){
+                return this.message.reply("Sorry, I can't rewind the timer past zero.")
+            }
+            
+        }else{
+            if((this.count + time) > this.speechLength*60){
+                return this.message.reply("Sorry, I can't roll timer past the speech length.")
+            }
+        }
+        this.count += time;
+        
+        if(time > 0){
+            this.message.reply('Rolled the timer forwards by ' + time + ' seconds. Now at '+Math.trunc(this.count/60) + " : " + this.count%60 + ' minutes')
+        }else{
+            this.message.reply('Rolled the timer backwards by ' + Math.abs(time) + ' seconds. Now at '+Math.trunc(this.count/60) + " : " + this.count%60 + ' minutes')
+        }
+        
+    }
     
     tick(){
         
@@ -88,7 +111,7 @@ module.exports = class Timer extends Command{
             name:'timer',
             description:"Creates a timer to give time signals for a debate speech",
             category: 'Timer',
-            usage: "\n\n- +start \n\n- +pause \n\n- +resume \n\n- +end \n\n- +timers",
+            usage: "\n\n- +start \n\n- +pause \n\n- +resume \n\n- +end \n\n- +timers \n\n- +rewind \n\n- +forward",
             presets: ""
         })
     }
@@ -134,6 +157,26 @@ module.exports = class Timer extends Command{
                 //if yes, get the author's timer list and send kill request for timer
                 let t = timers[message.author.id]
                 killTimer(message, t, args);
+
+            }else{
+                message.reply("You have no timers currently ticking.")
+            }
+        }else if(args[0] == 'rewind'){
+            //check if the message author has a timer currently
+            if(message.author.id in timers){
+                //if yes, get the author's timer list and send kill request for timer
+                let t = timers[message.author.id]
+                rewindTimer(message, t, args);
+
+            }else{
+                message.reply("You have no timers currently ticking.")
+            }
+        }else if(args[0] == 'forward'){
+            //check if the message author has a timer currently
+            if(message.author.id in timers){
+                //if yes, get the author's timer list and send kill request for timer
+                let t = timers[message.author.id]
+                forwardTimer(message, t, args);
 
             }else{
                 message.reply("You have no timers currently ticking.")
@@ -348,6 +391,140 @@ function removeTimer(message, index){
         (timers[id])[i].setId(i);
     }
 
+}
+
+function rewindTimer(message, t, args){
+    //if there is one +rewind parameter
+    if(args.length == 1){
+        return message.reply("You need to type a parameter to use this command.\nTo rewind a timer, type '+rewind {TIME}' - TIME refers to how many seconds the timer should be rolled back")
+
+    }else if(args.length == 2){
+
+        /**
+         * Basically a loop to check how many timers exist, and create a string to summarize information
+         */
+        let timer_count = 0;
+        let res = "";
+        for(var i = 0; i < t.length; i++){
+            if(t[i].running){
+                res+= " {"+i+"} - "+ t[i].speechLength + " minute speech; Currently RUNNING at " + Math.trunc(t[i].count/60) + " : " + t[i].count%60 + " minutes.\n\n"
+
+            }else{
+                res+= " {"+i+"} - "+ t[i].speechLength + " minute speech; Currently PAUSED at " + Math.trunc(t[i].count/60) + " : " + t[i].count%60 + " minutes.\n\n"
+            }
+            timer_count++;
+        }
+        res += "To rewind a timer, type '+rewind {TIME} {TIMER INDEX}' - TIME refers to how many seconds the timer should be rolled back; Index refers to the order of the timers you own";
+        
+        //if there is only one timer rewind it
+        if(timer_count == 1){
+            //message.reply(message.author.username + "'s timer rewound!; Timer now at " + Math.trunc(t[0].count/60) + " : " + t[0].count%60 + " minutes.");
+            //extract number from the parameters
+            let temp_time = args[1].substring(1, args[1].length -1);
+            let time = parseFloat(temp_time);
+            if(temp_time == time.toString()){
+                return t[0].roll(time*(-1));
+            }
+            
+            
+        }else if(timer_count == 0){
+            return message.reply("You have no timers currently ticking.")
+        }else{
+        //if multiple timers exist, send out timers summary response
+            return message.reply(" You Have " + timer_count + " timers:\n" + res);
+        }
+
+            
+    //if there are multiple parameters on the +rewind command
+    }else if(args.length == 3){
+        //extract number from the parameters
+        let temp_index = args[2].substring(1, args[2].length -1);
+        let index = parseFloat(temp_index);
+        let temp_time = args[1].substring(1, args[1].length -1);
+        let time = parseFloat(temp_time);
+
+        //check if the parameter is a number
+        if(temp_index == index.toString() && temp_time == time.toString()){
+            
+            //if the parameter is greater than the amount of timers available
+            if(index < t.length){
+                if(temp_time == time.toString()){
+                    return t[index].roll(time*(-1));
+                }
+                
+            }
+            
+        }
+        return message.reply('Timer not found. It may not exist.');
+                
+    }
+}
+
+function forwardTimer(message, t, args){
+    //if there is one +forward parameter
+    if(args.length == 1){
+        return message.reply("You need to type a parameter to use this command.\nTo fast forward a timer, type '+forward {TIME}' - TIME refers to how many seconds the timer should be rolled forward")
+
+    }else if(args.length == 2){
+
+        /**
+         * Basically a loop to check how many timers exist, and create a string to summarize information
+         */
+        let timer_count = 0;
+        let res = "";
+        for(var i = 0; i < t.length; i++){
+            if(t[i].running){
+                res+= " {"+i+"} - "+ t[i].speechLength + " minute speech; Currently RUNNING at " + Math.trunc(t[i].count/60) + " : " + t[i].count%60 + " minutes.\n\n"
+
+            }else{
+                res+= " {"+i+"} - "+ t[i].speechLength + " minute speech; Currently PAUSED at " + Math.trunc(t[i].count/60) + " : " + t[i].count%60 + " minutes.\n\n"
+            }
+            timer_count++;
+        }
+        res += "To fast forward a timer, type '+forward {TIME} {TIMER INDEX}' - TIME refers to how many seconds the timer should be rolled forward; Index refers to the order of the timers you own";
+        
+        //if there is only one timer rewind it
+        if(timer_count == 1){
+            //message.reply(message.author.username + "'s timer rewound!; Timer now at " + Math.trunc(t[0].count/60) + " : " + t[0].count%60 + " minutes.");
+            //extract number from the parameters
+            let temp_time = args[1].substring(1, args[1].length -1);
+            let time = parseFloat(temp_time);
+            if(temp_time == time.toString()){
+                return t[0].roll(time);
+            }
+            
+            
+        }else if(timer_count == 0){
+            return message.reply("You have no timers currently ticking.")
+        }else{
+        //if multiple timers exist, send out timers summary response
+            return message.reply(" You Have " + timer_count + " timers:\n" + res);
+        }
+
+            
+    //if there are multiple parameters on the +forward command
+    }else if(args.length == 3){
+        //extract number from the parameters
+        let temp_index = args[2].substring(1, args[2].length -1);
+        let index = parseFloat(temp_index);
+        let temp_time = args[1].substring(1, args[1].length -1);
+        let time = parseFloat(temp_time);
+
+        //check if the parameter is a number
+        if(temp_index == index.toString() && temp_time == time.toString()){
+            
+            //if the parameter is greater than the amount of timers available
+            if(index < t.length){
+                if(temp_time == time.toString()){
+                    return t[index].roll(time);
+                }
+                
+            }
+            
+        }
+        return message.reply('Timer not found. It may not exist.');
+                
+    }
 }
 
 function listTimers(message, t, args){

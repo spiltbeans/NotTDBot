@@ -1,12 +1,13 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 3.2
+ * version: 3.3
  * 06/16/2020
  */
 /**
- * TOOD: motion bank
+ * TODO: motion bank
  * TODO: dev stop timers
+ * TODO: anonymous polls 
  */
 
 //requires
@@ -46,7 +47,7 @@ bot.on('message', async msg=>{
     let command = params[0];
 
     //command handler
-    if(command == 'start' || command == 'pause' || command == 'resume' || command == 'timers' || command == 'end'){   //timer command  
+    if(command == 'start' || command == 'pause' || command == 'resume' || command == 'timers' || command == 'end' || command == 'rewind' || command == 'forward'){   //timer command  
         bot.commands.get('timer').execute(msg, params);
 
     }else if(params[0] == 'poll'){ //poll command
