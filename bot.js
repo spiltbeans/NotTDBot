@@ -1,7 +1,7 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 3.4.3
+ * version: 3.4.4
  * 06/16/2020
  */
 /**
@@ -30,7 +30,7 @@ for(const file of commandFiles){
 }
 
 //const token = secrets.token;    //api token
-const token = secrets.test_token;
+//const token = secrets.test_token;
 const token = process.env.TOKEN;    //api token
 const prefix = '+';             //prefix for commands
 
