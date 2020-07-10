@@ -3,11 +3,11 @@ module.exports = class Fan_Service extends Command{
 
     constructor(...args){
         super(...args,{
-            name:'Fan_Service',
-            description:'Commands that were suggested',
+            name:'fan',
+            description:'Commands that were suggested by bot users',
             category: 'Fan Service',
-            usage: '+Fan',
-            presets: "**Commands:**\n"
+            usage: '\n\n- +f \n\n- +shake',
+            presets: ""
         })
     }
     async execute(message, args){
