@@ -11,7 +11,7 @@ const add_bot = 'To add this bot to your server click https://discordapp.com/oau
 const contact_help = 'If you need any help add me: Spiltbeans#3644';
 const add_server ="Join the CUDS Discord if you haven't already! https://discord.gg/Sxn7gyS";
 const suggestions = "If you have any suggestions for the bot, please fill out the form! https://forms.gle/urNntsGqJ8AvkEYQA"
-const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 3.4.1";
+const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 3.4.2";
 
 const help_response = note_help + '\n\n**Commonly used:**\n' + help_help + '\n\n' + start_help+ '\n\n' + resume_help+ '\n\n' + pause_help + '\n\n' + poll_help + '\n\n**Categories:**\n - timer - Category for all timer commands \n - poll - Category for all poll commands\n - fan - Category for suggested commands\n - contact - Category for contact information! \n\n' + add_bot + "\n\n" + suggestions;
 
@@ -36,7 +36,7 @@ module.exports = class Help extends Commands{
                 description: help_response,
             }})
         }else if(args.length == 2){
-            let command = args[1].substring(1, args[1].length-1)
+            let command = (args[1].substring(1, args[1].length-1)).toLowerCase();
             if(this.bot.commands.has(command) && command != 'dev'){
                 command = this.bot.commands.get(command);
                 
@@ -46,13 +46,13 @@ module.exports = class Help extends Commands{
                     description: '**Command:** +'+command.name +'\n\n **Usage:** ' + command.usage + '\n\n **Description:** '+command.description + '\n\n **Presets:** '+ command.presets,
                 }})
             }
-            if(args[1] == '{contact}'){
+            if(command == 'contact'){
                 return message.channel.send({embed: {
                     color: 3447003,
                     title: 'Contact Information',
                     description: '**Developer:** '+contact_help +'\n\n **Server:** ' + add_server + '\n\n **Bot:** '+add_bot +'\n\n **Source Code:** '+source_code +'\n\n **Suggestion Form:** '+suggestions,
                 }})
-            }else if(args[1] == '{start}'){
+            }else if(command == 'start'){
                 let b = {
                     name: "start",
                     description:"Creates a timer to give time signals for a debate speech",
@@ -65,7 +65,7 @@ module.exports = class Help extends Commands{
                     title: b.category,
                     description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
                 }})
-            }else if(args[1] == '{pause}'){
+            }else if(command == 'pause'){
                 let b = {
                     name: "pause",
                     description:"Pauses a timer currently running",
@@ -79,7 +79,7 @@ module.exports = class Help extends Commands{
                     description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
                 }})
                 
-            }else if(args[1] == '{resume}'){
+            }else if(command == 'resume'){
                 let b = {
                     name: "resume",
                     description:"Resumes a timer currently paused",
@@ -92,7 +92,7 @@ module.exports = class Help extends Commands{
                     title: b.category,
                     description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
                 }})
-            }else if(args[1] == '{end}'){
+            }else if(command == 'end'){
                 let b = {
                     name: "end",
                     description:"Kills a timer currently owned by user",
@@ -105,7 +105,7 @@ module.exports = class Help extends Commands{
                     title: b.category,
                     description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
                 }})
-            }else if(args[1] == '{timers}'){
+            }else if(command == 'timers'){
                 let b = {
                     name: "timers",
                     description:"Displays all timers currently owned by user",
@@ -118,7 +118,7 @@ module.exports = class Help extends Commands{
                     title: b.category,
                     description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
                 }})
-            }else if(args[1] == '{forward}'){
+            }else if(command == 'forward'){
                 let b = {
                     name: "forward",
                     description:"Fast forward a timer currently owned by user",
@@ -131,7 +131,7 @@ module.exports = class Help extends Commands{
                     title: b.category,
                     description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
                 }})
-            }else if(args[1] == '{rewind}'){
+            }else if(command == 'rewind'){
                 let b = {
                     name: "rewind",
                     description:"Rewind a timer currently owned by user",
@@ -144,7 +144,7 @@ module.exports = class Help extends Commands{
                     title: b.category,
                     description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
                 }})
-            }else if(args[1] == '{f}'){
+            }else if(command == 'f'){
                 let b = {
                     name: "F",
                     description:"Pays respect. ~ Suggested by Gaura Cappelletti",
@@ -157,7 +157,7 @@ module.exports = class Help extends Commands{
                     title: b.category,
                     description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
                 }})
-            }else if(args[1] == '{shake}'){
+            }else if(command == 'shake'){
                 let b = {
                     name: "Shake",
                     description:"Sends a virtual 'Shaking hands' gif. ~ Suggested by Gaura Cappelletti",

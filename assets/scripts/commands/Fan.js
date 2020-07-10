@@ -1,9 +1,9 @@
 const Command = require('./Command');
-module.exports = class Fan_Service extends Command{
+module.exports = class Fan extends Command{
 
     constructor(...args){
         super(...args,{
-            name:'fan',
+            name:'Fan',
             description:'Commands that were suggested by bot users',
             category: 'Fan Service',
             usage: '\n\n- +f \n\n- +shake',
