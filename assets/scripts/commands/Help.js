@@ -11,7 +11,7 @@ const add_bot = 'To add this bot to your server click https://discordapp.com/oau
 const contact_help = 'If you need any help add me: Spiltbeans#3644';
 const add_server ="Join the CUDS Discord if you haven't already! https://discord.gg/Sxn7gyS";
 const suggestions = "If you have any suggestions for the bot, please fill out the form! https://forms.gle/urNntsGqJ8AvkEYQA"
-const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 3.3.1";
+const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 3.4";
 
 const help_response = note_help + '\n\n**Commonly used:**\n' + help_help + '\n\n' + start_help+ '\n\n' + resume_help+ '\n\n' + pause_help + '\n\n' + poll_help + '\n\n**Categories:**\n - timer - Category for all timer commands \n - poll - Category for all poll commands\n - contact - Category for contact information! \n\n' + add_bot + "\n\n" + suggestions;
 
@@ -138,6 +138,32 @@ module.exports = class Help extends Commands{
                     category: 'Timer',
                     usage: "\n\n- +rewind {TIME} \n\n OR \n\n- +rewind {TIME} {TIMER INDEX}",
                     presets: "\n\n- {TIME} - The amount of seconds you want to rewind the timer \n\n- {TIMER INDEX} - If more than one timer owned by user, options: displayed when you type '+rewind'"
+                }
+                return message.channel.send({embed: {
+                    color: 3447003,
+                    title: b.category,
+                    description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
+                }})
+            }else if(args[1] == '{f}'){
+                let b = {
+                    name: "F",
+                    description:"Pays respect. ~ Suggested by Gaura Cappelletti",
+                    category: 'Fan Service',
+                    usage: "\n\n- +F",
+                    presets: ""
+                }
+                return message.channel.send({embed: {
+                    color: 3447003,
+                    title: b.category,
+                    description: '**Command:** +'+b.name +'\n\n **Usage:** ' + b.usage + '\n\n **Description:** '+b.description + '\n\n **Presets:** '+ b.presets,
+                }})
+            }else if(args[1] == '{shake}'){
+                let b = {
+                    name: "Shake",
+                    description:"Sends a virtual 'Shaking hands' gif. ~ Suggested by Gaura Cappelletti",
+                    category: 'Fan Service',
+                    usage: "\n\n- +shake",
+                    presets: ""
                 }
                 return message.channel.send({embed: {
                     color: 3447003,

@@ -1,13 +1,16 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 3.3.1
+ * version: 3.4
  * 06/16/2020
  */
 /**
  * TODO: motion bank
  * TODO: dev stop timers
  * TODO: anonymous polls 
+ * TODO: HELP ALL!!!!!!!!!!!!
+ * TODO: live timer 
+ * TODO: delete x amount of messages
  */
 
 //requires
@@ -44,21 +47,25 @@ bot.on('message', async msg=>{
     }
     //command parameter parser
     let params = msg.content.substring(prefix.length).split(' ');
-    let command = params[0];
+    let command = params[0].toLowerCase();
 
     //command handler
     if(command == 'start' || command == 'pause' || command == 'resume' || command == 'timers' || command == 'end' || command == 'rewind' || command == 'forward'){   //timer command  
         bot.commands.get('timer').execute(msg, params);
 
-    }else if(params[0] == 'poll'){ //poll command
+    }else if(command == 'poll'){ //poll command
         bot.commands.get('poll').execute(msg, params);
         
-    }else if(params[0] == 'help'){  //help command
+    }else if(command == 'help'){  //help command
         bot.commands.get('help').execute(msg, params);
         
-    }else if(params[0] == 'dev'){ //developer commands
+    }else if(command == 'dev'){ //developer commands
         
         bot.commands.get('developer').execute(msg, params);
+
+    }else if(command == 'f' || command == 'shake'){ //part of the suggested commands
+        bot.commands.get('fan_service').execute(msg, params);
+
     }
 });
 
