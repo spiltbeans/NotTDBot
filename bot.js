@@ -1,7 +1,7 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 3.4.2
+ * version: 3.4.3
  * 06/16/2020
  */
 /**
@@ -16,7 +16,7 @@
 //requires
 const Discord = require("discord.js");
 const bot = new Discord.Client();
-const secrets = require('./secure/secrets');
+//const secrets = require('./secure/secrets');
 
 const fs = require('fs');
 
@@ -31,7 +31,7 @@ for(const file of commandFiles){
 
 //const token = secrets.token;    //api token
 const token = secrets.test_token;
-//const token = process.env.TOKEN;    //api token
+const token = process.env.TOKEN;    //api token
 const prefix = '+';             //prefix for commands
 
 //bot online
