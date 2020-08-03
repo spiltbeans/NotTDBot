@@ -1,7 +1,7 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 3.4.4
+ * version: 4.0
  * 06/16/2020
  */
 /**
@@ -16,11 +16,12 @@
 //requires
 const Discord = require("discord.js");
 const bot = new Discord.Client();
-//const secrets = require('./secure/secrets');
+//const secrets = require('./assets/secure/secrets');
 
 const fs = require('fs');
 
 bot.commands = new Discord.Collection();
+bot.checkins = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./assets/scripts/commands/').filter(file=>file.endsWith('.js'));
 for(const file of commandFiles){
@@ -67,7 +68,66 @@ bot.on('message', async msg=>{
 
         bot.commands.get('fan').execute(msg, params);
 
+    }else if(command == 'checkin'){ //equity checker command *only done by admin
+        //form of: +checkin {new_role_id} {equity_guideline}
+        //collection: server_id => {new_role_id, gate_keeper_channel}
+
+        bot.commands.get('jarvis').execute(msg, params)
     }
 });
+
+bot.on('messageReactionAdd', async (reaction, user) =>{
+    try{
+        if(reaction.message.partial) await reaction.message.fetch();
+        if(reaction.partial) await reaction.fetch();
+    
+        if(user.bot) return;
+    
+        if(!reaction.message.guild) return;
+
+        let data = (bot.checkins.get(reaction.message.guild.id))
+        if(data){
+            if(reaction.message.channel.id === data.channel.id){
+                if(reaction.emoji.name == '✅'){
+        
+                    await reaction.message.guild.members.cache.get(user.id).roles.add(data.role)
+                }
+            }
+        }
+        
+    }catch(err){
+        return console.log('Problem assigning a role: ' + err)
+    }
+    
+
+
+})
+bot.on('messageReactionRemove', async (reaction, user) =>{
+    try{
+        if(reaction.message.partial) await reaction.message.fetch();
+        if(reaction.partial) await reaction.fetch();
+    
+        if(user.bot) return;
+    
+        if(!reaction.message.guild) return;
+
+        let data = (bot.checkins.get(reaction.message.guild.id))
+        if(data){
+            if(reaction.message.channel.id === data.channel.id){
+                if(reaction.emoji.name == '✅'){
+        
+                    await reaction.message.guild.members.cache.get(user.id).roles.remove(data.role)
+                }
+            }
+        }
+
+    }catch(err){
+        return console.log('Problem removing a role: '+err)
+    }
+    
+
+
+})
+
 
 bot.login(token);       //bot login with token

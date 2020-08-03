@@ -1,0 +1,93 @@
+//const secrets = require('./../../secure/secrets.json');
+
+function IsAdmin(message){
+    try{
+       let authorization = false
+        message.guild.members.cache.forEach(function(guildMember){
+            if(guildMember.hasPermission("ADMINISTRATOR") && !guildMember.user.bot && message.author.id == guildMember.user.id){
+                authorization = true
+            }
+
+        })
+        return authorization
+    }catch(err){
+        console.log("Could not complete admin search: "+err)
+    }
+    
+}
+
+const Command = require('./Command')
+module.exports = class Jarvis extends Command{
+
+    constructor(...args){
+        super(...args, {
+            name:'jarvis',
+            description:'Helper module to run miscellaneous tasks',
+            category: 'Helper',
+            usage: '+jarvis',
+            presets: "+checkin {new_role_id} {equity_constitution}"
+            
+        })
+    }
+    
+    async execute(message, args){ 
+        if(args[0] == 'checkin'){
+            try{
+                if(IsAdmin(message)){
+                    if(args.length == 2){
+                        if(args[1] == 'DELETE'){
+                        
+                            //delete process
+                            if(this.bot.checkins.get(message.guild.id)){
+                                this.bot.checkins.delete(message.guild.id)
+                                message.channel.send('Check-in deleted for server ' +message.guild.name)
+                                
+                            }else{
+                                message.channel.send('Check-in does not exist on the server yet. Please use +checkin to create a checkin')
+                            }
+                        }
+                        
+                    }else if(args.length == 3){
+                        
+                            //form of: +checkin {new_role_id} {equity_constitution}
+                            //collection: server_id => {new_role_id, gate_keeper_channel}
+        
+                            let new_role = args[1].substring(args[1].indexOf('{')+1, args[1].indexOf('}'));
+                            let equity = args[2].substring(args[2].indexOf('{')+1, args[2].indexOf('}'));
+                            
+                            if(this.bot.checkins.get(message.guild.id)){
+                                message.channel.send('Check-in already exists in server. Please use "+checkin DELETE" to delete existing check-in')
+                            }else{
+                                this.bot.checkins.set(message.guild.id, {role:new_role, channel:message.channel})
+                                let b = {
+                                    name: 'CUDS Check-In',
+                                    description:"You must react to this message to continue in this server. \n\n**By doing so, you agree to abide by the __"+message.guild.name + "__ equity guidelines:**\n\n"+equity
+                                }
+                                
+                                return message.channel.send({embed: {
+                                    color: 3447003,
+                                    title: b.name,
+                                    description: b.description,
+                                }}).then(sent =>{
+                    
+                                    sent.react('✅')
+                                })
+                                
+                            }   
+                            
+                    }else{
+                        message.reply('You are not using the correct amount of parameters to use this command. Please see +help for reference')
+                    }
+         
+                }else{
+                    message.reply('Could not complete command. You are not recognized as a server admin.')
+                }
+            }catch(err){
+                console.log("Error with check-in: "+err)
+            }
+            
+                       
+            
+        }       
+    }
+}

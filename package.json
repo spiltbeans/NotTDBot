@@ -1,6 +1,6 @@
 {
   "name": "nottdbot",
-  "version": "3.0.0",
+  "version": "4.0",
   "description": "not a td bot for Carleton University Debate Society",
   "main": "bot.js",
   "scripts": {
