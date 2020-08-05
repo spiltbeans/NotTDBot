@@ -1,7 +1,7 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 4.0
+ * version: 4.1
  * 06/16/2020
  */
 /**
@@ -68,7 +68,7 @@ bot.on('message', async msg=>{
 
         bot.commands.get('fan').execute(msg, params);
 
-    }else if(command == 'checkin'){ //equity checker command *only done by admin
+    }else if(command == 'checkin' || command == 'msg'){ //equity checker command *only done by admin
         //form of: +checkin {new_role_id} {equity_guideline}
         //collection: server_id => {new_role_id, gate_keeper_channel}
 

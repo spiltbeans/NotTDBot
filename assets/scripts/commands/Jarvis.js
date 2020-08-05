@@ -16,7 +16,8 @@ function IsAdmin(message){
     
 }
 
-const Command = require('./Command')
+const Command = require('./Command');
+const { MessageAttachment } = require('discord.js');
 module.exports = class Jarvis extends Command{
 
     constructor(...args){
@@ -60,7 +61,7 @@ module.exports = class Jarvis extends Command{
                             }else{
                                 this.bot.checkins.set(message.guild.id, {role:new_role, channel:message.channel})
                                 let b = {
-                                    name: 'CUDS Check-In',
+                                    name: message.guild.name+' Check-In',
                                     description:"You must react to this message to continue in this server. \n\n**By doing so, you agree to abide by the __"+message.guild.name + "__ equity guidelines:**\n\n"+equity
                                 }
                                 
@@ -88,6 +89,48 @@ module.exports = class Jarvis extends Command{
             
                        
             
-        }       
+        }else if(args[0] == 'msg'){
+            if(args[1] == 'DEV'){
+                try{
+                    
+                    if(args.length == 2){
+                        let b = {
+                            name: 'Developer Help',
+                            description:message.author.username + "#"+message.author.discriminator+" is asking for assistance!"
+                            
+                        }
+                        this.bot.users.cache.get(process.en.bot_owner).send({embed: {
+                            color: 3447003,
+                            title: b.name,
+                            description: b.description,
+                        }})
+                    }else{
+                        let transport = ''
+                        for(var i = 1; i< args.length; i++){
+                            transport+= args[i] + ' '
+                        }
+                        let b = {
+                            name: 'Developer Help',
+                            description:transport.substring(transport.indexOf('{')+1, transport.indexOf('}'))
+                            
+                        }
+
+                        this.bot.users.cache.get(process.en.bot_owner).send({embed: {
+                            color: 3447003,
+                            title: b.name,
+                            description: message.author.username + "#"+message.author.discriminator+" is asking for assistance!\n"+b.description,
+                        }})
+                    }
+                    return message.reply('Message sent to bot developer :)')
+                }catch(err){
+                    console.log('Could not send message to developer: '+err)
+                }
+                
+                
+            }else{
+                message.reply("Sorry, I'm not sure who you are trying to contact. Type +help for help")
+            }
+
+        }
     }
 }

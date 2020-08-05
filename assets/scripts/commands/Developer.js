@@ -7,7 +7,7 @@ module.exports = class Developer extends Command{
             description:'Commands to for the developer',
             category: 'Developer',
             usage: '+dev',
-            presets: "**Commands:**\n\n- terminate - shut down bot\n\n - servers - list host servers for bot\n\n - wake - just checking in\n\n - announce {} - make an announcement to all admins for every server\n\n - commands - display commands"
+            presets: "**Commands:**\n\n- terminate - shut down bot\n\n - servers - list host servers for bot\n\n - wake - just checking in\n\n - admins - list admins for every server with the bot\n\n - announce {} - make an announcement to all admins for every server\n\n - commands - display commands"
         })
     }
     async execute(message, args){
@@ -25,13 +25,15 @@ module.exports = class Developer extends Command{
                 }else if(args[1] == 'servers'){ //list the servers the bot is connected to
                     try{
                         let servers = "";
+                        let counter = 0;
                         this.bot.guilds.cache.forEach(function(guildMember, guildMemberId) {
                             console.log("Server Name: " + guildMember.name + ", Server ID: "+ guildMemberId);
                             servers += guildMember.name + "; \n";
+                            counter++
                         })
                         return message.author.send({embed: {
                             title:"**Servers List**",
-                            description: servers,
+                            description: servers + '\n'+counter+ ' servers joined.',
                         }})
                     }catch(err){
                         console.log("Could not fetch servers: "+ err)
@@ -88,24 +90,26 @@ module.exports = class Developer extends Command{
                     try{
                         let admins = {}
                         let response = ""
+                        let counter = 0;
                         await this.bot.guilds.cache.forEach(function(guild) {
                             guild.members.cache.forEach(function(guildMember){
                                 if(guildMember.hasPermission("ADMINISTRATOR") && guildMember.user.bot == false && !(guildMember.user.id in admins)){
                                 
                                     admins[guildMember.user.id] = guildMember.user
+                                    counter++;
                                 }
 
                             })
                             
                         })
                         for (var id of Object.keys(admins)) {
-                            response += '- '+admins[id].username + "\n"
+                            response += '- '+admins[id].username +"#"+admins[id].discriminator+ "\n"
                          
                         }
                         message.author.send({embed: {
                             color: 3447003,
                             title: '**Administrators**',
-                            description: response,
+                            description: response + '\n'+counter+ ' recognized administrators.',
                         }})
                         
 
