@@ -39,8 +39,8 @@ module.exports = class Jarvis extends Command{
                         if(args[1] == 'DELETE'){
                         
                             //delete process
-                            if(this.bot.checkins.get(message.guild.id)){
-                                this.bot.checkins.delete(message.guild.id)
+                            if(this.database.get(message.guild.id)){
+                                this.database.delete(message.guild.id)
                                 message.channel.send('Check-in deleted for server ' +message.guild.name)
                                 
                             }else{
@@ -56,25 +56,27 @@ module.exports = class Jarvis extends Command{
                             let new_role = args[1].substring(args[1].indexOf('{')+1, args[1].indexOf('}'));
                             let equity = args[2].substring(args[2].indexOf('{')+1, args[2].indexOf('}'));
                             
-                            if(this.bot.checkins.get(message.guild.id)){
-                                message.channel.send('Check-in already exists in server. Please use "+checkin DELETE" to delete existing check-in')
-                            }else{
-                                this.bot.checkins.set(message.guild.id, {role:new_role, channel:message.channel})
-                                let b = {
-                                    name: message.guild.name+' Check-In',
-                                    description:"You must react to this message to continue in this server. \n\n**By doing so, you agree to abide by the __"+message.guild.name + "__ equity guidelines:**\n\n"+equity
+                            await this.database.get(message.guild.id).then(guild =>{
+                                if(guild){
+                                    message.channel.send('Check-in already exists in server. Please use "+checkin DELETE" to delete existing check-in')
+                                }else{
+                                    this.database.set(message.guild.id, {role:new_role, channel:message.channel})
+                                    let b = {
+                                        name: message.guild.name+' Check-In',
+                                        description:"You must react to this message to continue in this server. \n\n**By doing so, you agree to abide by the __"+message.guild.name + "__ equity guidelines:**\n\n"+equity
+                                    }
+                                    
+                                    return message.channel.send({embed: {
+                                        color: 3447003,
+                                        title: b.name,
+                                        description: b.description,
+                                    }}).then(sent =>{
+                        
+                                        sent.react('✅')
+                                    })
                                 }
-                                
-                                return message.channel.send({embed: {
-                                    color: 3447003,
-                                    title: b.name,
-                                    description: b.description,
-                                }}).then(sent =>{
-                    
-                                    sent.react('✅')
-                                })
-                                
-                            }   
+                            })
+                           
                             
                     }else{
                         message.reply('You are not using the correct amount of parameters to use this command. Please see +help for reference')
@@ -99,7 +101,7 @@ module.exports = class Jarvis extends Command{
                             description:message.author.username + "#"+message.author.discriminator+" is asking for assistance!"
                             
                         }
-                        this.bot.users.cache.get(process.en.bot_owner).send({embed: {
+                        this.bot.users.cache.get(process.env.bot_owner).send({embed: {
                             color: 3447003,
                             title: b.name,
                             description: b.description,
@@ -115,7 +117,7 @@ module.exports = class Jarvis extends Command{
                             
                         }
 
-                        this.bot.users.cache.get(process.en.bot_owner).send({embed: {
+                        this.bot.users.cache.get(process.env.bot_owner).send({embed: {
                             color: 3447003,
                             title: b.name,
                             description: message.author.username + "#"+message.author.discriminator+" is asking for assistance!\n"+b.description,
@@ -132,5 +134,6 @@ module.exports = class Jarvis extends Command{
             }
 
         }
+        
     }
 }

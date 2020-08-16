@@ -1,7 +1,7 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 4.1
+ * version: 5.0
  * 06/16/2020
  */
 /**
@@ -15,19 +15,23 @@
 
 //requires
 const Discord = require("discord.js");
-const bot = new Discord.Client();
-//const secrets = require('./assets/secure/secrets');
+const Keyv = require('keyv')
+//const process.env = require('./assets/secure/secrets');
+
+const bot = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+
+const database = new Keyv(process.env.MONGODB_URI);
+database.on('error', err => console.error('Keyv connection error:', err));
 
 const fs = require('fs');
 
 bot.commands = new Discord.Collection();
-bot.checkins = new Discord.Collection();
 
 const commandFiles = fs.readdirSync('./assets/scripts/commands/').filter(file=>file.endsWith('.js'));
 for(const file of commandFiles){
     const command = require(`./assets/scripts/commands/${file}`);
 
-    bot.commands.set(command.name.toLowerCase(), new command(bot))
+    bot.commands.set(command.name.toLowerCase(), new command(bot, database))
 }
 
 //const token = secrets.token;    //api token
@@ -49,7 +53,6 @@ bot.on('message', async msg=>{
     //command parameter parser
     let params = msg.content.substring(prefix.length).split(' ');
     let command = params[0].toLowerCase();
-
     //command handler
     if(command == 'start' || command == 'pause' || command == 'resume' || command == 'timers' || command == 'end' || command == 'rewind' || command == 'forward'){   //timer command  
         bot.commands.get('timer').execute(msg, params);
@@ -74,6 +77,7 @@ bot.on('message', async msg=>{
 
         bot.commands.get('jarvis').execute(msg, params)
     }
+    
 });
 
 bot.on('messageReactionAdd', async (reaction, user) =>{
@@ -85,15 +89,17 @@ bot.on('messageReactionAdd', async (reaction, user) =>{
     
         if(!reaction.message.guild) return;
 
-        let data = (bot.checkins.get(reaction.message.guild.id))
-        if(data){
-            if(reaction.message.channel.id === data.channel.id){
-                if(reaction.emoji.name == '✅'){
-        
-                    await reaction.message.guild.members.cache.get(user.id).roles.add(data.role)
+        await database.get(reaction.message.guild.id).then(async data =>{
+            if(data){
+                if(reaction.message.channel.id === data.channel.id){
+                    if(reaction.emoji.name == '✅'){
+            
+                        await reaction.message.guild.members.cache.get(user.id).roles.add(data.role)
+                    }
                 }
             }
-        }
+        })
+        
         
     }catch(err){
         return console.log('Problem assigning a role: ' + err)
@@ -110,16 +116,17 @@ bot.on('messageReactionRemove', async (reaction, user) =>{
         if(user.bot) return;
     
         if(!reaction.message.guild) return;
-
-        let data = (bot.checkins.get(reaction.message.guild.id))
-        if(data){
-            if(reaction.message.channel.id === data.channel.id){
-                if(reaction.emoji.name == '✅'){
         
-                    await reaction.message.guild.members.cache.get(user.id).roles.remove(data.role)
+        await database.get(reaction.message.guild.id).then(async data => {
+            if(data){
+                if(reaction.message.channel.id === data.channel.id){
+                    if(reaction.emoji.name == '✅'){
+            
+                        await reaction.message.guild.members.cache.get(user.id).roles.remove(data.role)
+                    }
                 }
             }
-        }
+        })
 
     }catch(err){
         return console.log('Problem removing a role: '+err)
