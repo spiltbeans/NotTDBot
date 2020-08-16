@@ -62,7 +62,7 @@ module.exports = class Jarvis extends Command{
                                 }else{
                                     this.database.set(message.guild.id, {role:new_role, channel:message.channel})
                                     let b = {
-                                        name: message.guild.name+' Check-In',
+                                        name: message.guild.name,
                                         description:"You must react to this message to continue in this server. \n\n**By doing so, you agree to abide by the __"+message.guild.name + "__ equity guidelines:**\n\n"+equity
                                     }
                                     
