@@ -1,7 +1,7 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 5.0.1
+ * version: 5.1
  * 06/16/2020
  */
 /**
@@ -16,7 +16,7 @@
 //requires
 const Discord = require("discord.js");
 const Keyv = require('keyv')
-//const process.env = require('./assets/secure/secrets');
+//const secrets = require('./assets/secure/secrets');
 
 const bot = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
 

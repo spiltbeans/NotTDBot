@@ -7,7 +7,7 @@ module.exports = class Developer extends Command{
             description:'Commands to for the developer',
             category: 'Developer',
             usage: '+dev',
-            presets: "**Commands:**\n\n- terminate - shut down bot\n\n - servers - list host servers for bot\n\n - wake - just checking in\n\n - admins - list admins for every server with the bot\n\n - announce {} - make an announcement to all admins for every server\n\n - commands - display commands"
+            presets: "**Commands:**\n\n- terminate - shut down bot\n\n - servers - list host servers for bot\n\n - wake - just checking in\n\n - admins - list admins for every server with the bot\n\n - announce {} - make an announcement to all admins for every server\n\n - checkins - display servers with checkin\n\n - commands - display commands"
         })
     }
     async execute(message, args){
@@ -115,6 +115,31 @@ module.exports = class Developer extends Command{
 
                     }catch(err){
                         return console.log('Could not make announcement to admins: '+ err)
+                    }
+
+                }else if(args[1] == 'checkins'){    //announcement to all server admins
+                    try{
+                        let servers = []
+                        let response = ""
+                        let counter = 0;
+                        await this.bot.guilds.cache.forEach(function(guild) {
+                            
+                            servers.push(guild)
+                        })
+                        
+                        for(var i = 0; i< servers.length; i++){
+                            if(this.database.get(servers[i].id)){
+                                response+= servers[i].name + '; \n';
+                                counter++;
+                            }
+                        }
+                        return message.author.send({embed: {
+                            title:"**Checkin List**",
+                            description: response + '\n'+counter+ ' servers using checkin.',
+                        }})
+
+                    }catch(err){
+                        return console.log('Could not make count checkins: '+ err)
                     }
 
                 }
