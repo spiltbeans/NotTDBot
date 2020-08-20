@@ -128,7 +128,7 @@ module.exports = class Developer extends Command{
                         })
                         
                         for(var i = 0; i< servers.length; i++){
-                            if(this.database.get(servers[i].id)){
+                            if(await this.database.get(servers[i].id)){
                                 response+= servers[i].name + '; \n';
                                 counter++;
                             }
