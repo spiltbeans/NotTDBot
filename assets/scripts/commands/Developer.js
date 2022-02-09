@@ -139,6 +139,9 @@ module.exports = class Developer extends Command{
                             title:"**Checkin List**",
                             description: response + '\n'+counter+ ' servers using checkin.',
                         }})
+                    }catch(err){
+                        return console.log('could not find checkins: '+ err)
+                    }
 
                 }else if(args[1] == 'wake'){
                     message.reply("I'm wide awake!");

@@ -11,7 +11,7 @@ const add_bot = 'To add this bot to your server click https://discordapp.com/oau
 const contact_help = 'If you need any help add me: Spiltbeans#3644';
 const add_server ="Join the CUDS Discord if you haven't already! https://discord.gg/Sxn7gyS";
 const suggestions = "If you have any suggestions for the bot, please fill out the form! https://forms.gle/urNntsGqJ8AvkEYQA"
-const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 5.2";
+const source_code = "You can find the source code here https://github.com/spiltbeans/NotTDBot; Version 5.2.1";
 
 const help_response = note_help + '\n\n**Commonly used:**\n' + help_help + '\n\n' + start_help+ '\n\n' + resume_help+ '\n\n' + pause_help + '\n\n' + poll_help + '\n\n**Categories:**\n - timer - Category for all timer commands \n - poll - Category for all poll commands\n - contact - Category for contact information! \n\n' + add_bot;
 
