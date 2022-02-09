@@ -1,15 +1,21 @@
 /**
  * Author: Eyas Valdez
  * Github: https://github.com/spiltbeans
- * version: 3.0
+ * version: 5.2
  * 06/16/2020
  */
 
 
 //requires
 const Discord = require("discord.js");
-const bot = new Discord.Client();
-const secrets = require('./secure/secrets');
+const Keyv = require('keyv')
+const secrets = require('./assets/secure/secrets');
+
+const bot = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
+
+const database = new Keyv(secrets.CLEAR_DB_URI);
+
+database.on('error', err => console.error('Keyv connection error:', err));
 
 const fs = require('fs');
 
@@ -25,7 +31,7 @@ for(const file of commandFiles){
 const token = secrets.token;    //api token
 //const token = secrets.test_token;
 //const token = process.env.TOKEN;    //api token
-const prefix = '!';             //prefix for commands
+const prefix = '+';             //prefix for commands
 
 //bot online
 bot.on('ready', ()=>{
@@ -55,6 +61,16 @@ bot.on('message', async msg=>{
     }else if(params[0] == 'dev'){ //developer commands
         params.push(secrets)
         bot.commands.get('developer').execute(msg, params);
+
+    }else if(command == 'f' || command == 'shake'){ //part of the suggested commands
+
+        bot.commands.get('fan').execute(msg, params);
+
+    }else if(command == 'checkin' || command == 'msg' || command == 'manual'){ //equity checker command *only done by admin
+        //form of: +checkin {new_role_id} {equity_guideline}
+        //collection: server_id => {new_role_id, gate_keeper_channel}
+
+        bot.commands.get('jarvis').execute(msg, params)
     }
 });
 
