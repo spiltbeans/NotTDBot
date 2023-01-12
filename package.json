@@ -17,8 +17,6 @@
   },
   "homepage": "https://github.com/spiltbeans/NotTDBot#readme",
   "dependencies": {
-    "@keyv/mongo": "^1.1.0",
-    "@keyv/mysql": "^1.1.4",
     "discord.js": "^12.1.1",
     "fs": "0.0.1-security",
     "timer": "^1.0.1",

@@ -7,15 +7,12 @@
 
 
 //requires
+
 const Discord = require("discord.js");
-const Keyv = require('keyv')
-const secrets = require('./assets/secure/secrets');
+const isTESTING = require('./config.json').isTESTING
+const secrets = isTESTING ? require('./assets/secure/secrets') : ""
 
 const bot = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'] });
-
-const database = new Keyv(secrets.CLEAR_DB_URI);
-
-database.on('error', err => console.error('Keyv connection error:', err));
 
 const fs = require('fs');
 
@@ -28,9 +25,8 @@ for(const file of commandFiles){
     bot.commands.set(command.name.toLowerCase(), new command(bot))
 }
 
-const token = secrets.token;    //api token
+const token = isTESTING ? secrets.token : process.env.TOKEN   //api token
 //const token = secrets.test_token;
-//const token = process.env.TOKEN;    //api token
 const prefix = '+';             //prefix for commands
 
 //bot online

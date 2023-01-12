@@ -1,0 +1,8 @@
+version: '3'
+services:
+  app:
+    container_name: nottdbot
+    restart: always
+    build: .
+    env_file:
+      - .env

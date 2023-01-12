@@ -1,5 +1,7 @@
 const Command = require('./Command');
-const secrets = require('./../../secure/secrets.json');
+const isTESTING = require('../../../config.json').isTESTING
+const secrets = isTESTING ? require('./../../secure/secrets.json') : ""
+const bot_owner = isTESTING ? secrets.bot_owner : process.env.BOT_OWNER
 module.exports = class Developer extends Command{
 
     constructor(...args){
@@ -12,8 +14,7 @@ module.exports = class Developer extends Command{
         })
     }
     async execute(message, args){
-        //if(message.author.id == process.env.bot_owner){
-        if(message.author.id == secrets.bot_owner){
+        if(message.author.id == bot_owner){
 
             if(args.length < 2){
                 return message.reply('You need a command, King'); 

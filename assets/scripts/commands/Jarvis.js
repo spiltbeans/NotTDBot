@@ -1,4 +1,6 @@
-const secrets = require('./../../secure/secrets.json');
+const isTESTING = require('../../../config.json').isTESTING
+const secrets = isTESTING ? require('./../../secure/secrets.json') : ""
+const bot_owner = isTESTING ? secrets.bot_owner : process.env.BOT_OWNER
 
 function IsAdmin(message){
     try{
@@ -143,7 +145,7 @@ module.exports = class Jarvis extends Command{
                             description:message.author.username + "#"+message.author.discriminator+" is asking for assistance!"
                             
                         }
-                        this.bot.users.cache.get(secrets.bot_owner).send({embed: {
+                        this.bot.users.cache.get(bot_owner).send({embed: {
                             color: 3447003,
                             title: b.name,
                             description: b.description,
@@ -159,7 +161,7 @@ module.exports = class Jarvis extends Command{
                             
                         }
 
-                        this.bot.users.cache.get(secrets.bot_owner).send({embed: {
+                        this.bot.users.cache.get(bot_owner).send({embed: {
                             color: 3447003,
                             title: b.name,
                             description: message.author.username + "#"+message.author.discriminator+" is asking for assistance!\n"+b.description,
